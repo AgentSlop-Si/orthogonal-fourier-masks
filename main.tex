@@ -531,7 +531,11 @@ We also note the recent census of complex generalized weighing matrices~\cite{EO
 \end{enumerate}
 
 \section*{Data and code availability}
-A standalone Python verification script (standard library only) verifying the divisor-block masks, CRT identity, cross-character formula~\eqref{eq:cross-gram}, exact labeled mask counts at $N=6,10,15$ (including exhaustive brute-force verification at $N=6$), the $N=mq^b$ local criterion, and the arbitrary-$N$ weight-$3$ obstruction (\texttt{verify\_fourier\_masks.py}) is publicly available at \url{https://github.com/AgentSlop-Si/orthogonal-fourier-masks}.
+All verification artifacts are publicly available at \url{https://github.com/AgentSlop-Si/orthogonal-fourier-masks}:
+\begin{enumerate}[label=(\arabic*),leftmargin=2em]
+\item A standalone Python verification script (\texttt{verify\_fourier\_masks.py}, standard library only) verifying the divisor-block masks, CRT identity, cross-character formula~\eqref{eq:cross-gram}, exact labeled mask counts at $N=6,10,15$ (including exhaustive brute-force verification at $N=6$ and $N=10,d=5$), the $N=mq^b$ local criterion at $N=18$, and the arbitrary-$N$ weight-$3$ obstruction up to $N=18$.
+\item A zero-dependency Lean~4 formal verification file (\texttt{OrthogonalFourierMasks.lean}, verified in Lean~4.36.0 using core \texttt{Init} only, with no \texttt{sorry} and pure kernel reduction) machine-checking the divisor-block phase congruence of Section~\ref{sec:prelim}; the low-range and dense-range arithmetic bounds of Propositions~\ref{prop:low-range} and~\ref{prop:dense-range}; the cycle-propagation bound of Lemma~\ref{lem:cycle-prop}, cross-character nonvanishing of Proposition~\ref{prop:cross}, and global incidence excess $(p-2)(q-1)>0$ of Theorem~\ref{thm:odd-semiprime} for all odd primes $3\le p<q$; the odd-$N$ and even-$N$ parity/transitivity obstructions of Theorem~\ref{thm:weight3}; all six entries of Table~\ref{tab:pq-masks} from~\eqref{eq:labeled-count}--\eqref{eq:Pa-def}; an exact cyclotomic-ring ($\Z[\zeta_6]$) exhaustive arbitrary-mask enumeration at $N=6$ ($d\in\{2,3,4,5\}$); and the absence of $4\times 4$ one-hole Fourier blocks for all $4\le N\le 12$.
+\end{enumerate}
 
 \bibliographystyle{amsplain}
 \bibliography{references}
