@@ -3,8 +3,8 @@
 
   Zero-dependency Lean 4 formal verification companion to:
   "Degree Classification, Block Rigidity, and Labeled Enumeration for Orthogonal Binary Fourier Masks"
-  by Daniyar Kuttymbek, Adilkhan Kuttymbek, Amina Kolpenova,
-  Mukhammadali Kottumbekov, and Dayana Kuttymbek.
+  by Daniyar Kuttymbek, Adilkhan Kuttymbek, Dayana Kuttymbek,
+  Amina Kolpenova, and Mukhammadali Kottumbekov.
 
   Uses Lean 4 core (`Init`) only — no Mathlib or external dependencies required.
   Verify with: `lean OrthogonalFourierMasks.lean`
