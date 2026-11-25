@@ -1,0 +1,531 @@
+\documentclass[11pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+\numberwithin{equation}{section}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\diag}{\operatorname{diag}}
+
+\title[Orthogonal Binary Fourier Masks]{Degree Classification, Block Rigidity, and Labeled Enumeration\\for Orthogonal Binary Fourier Masks}
+
+\author{Daniyar Kuttymbek}
+\address{Astana, Kazakhstan}
+\email{daniyar.kuttymbek@gmail.com}
+
+\author{Adilkhan Kuttymbek}
+\address{Astana, Kazakhstan}
+\email{adilkhan.kuttymbek@gmail.com}
+
+\author{Amina Kolpenova}
+\address{Astana, Kazakhstan}
+\email{aminakolpenova@gmail.com}
+
+\date{\today}
+\subjclass[2020]{Primary 05B20, 15B10; Secondary 11R18, 42A99, 15A60}
+\keywords{Discrete Fourier matrix, binary masks, complex Hadamard submatrices, unit weighing matrices, vanishing sums of roots of unity, sparse inverse approximation}
+
+\begin{document}
+
+\begin{abstract}
+Fix a positive integer $N$ and a primitive complex $N$-th root of unity $\zeta_N$. An \emph{orthogonal binary Fourier mask} of degree $d$ is an $N\times N$ binary matrix $R\in\{0,1\}^{N\times N}$ whose entrywise masked Fourier matrix $D_{rc}=R_{rc}\zeta_N^{rc}$ ($0\le r,c<N$) satisfies $DD^*=dI_N$ (equivalently $D^*D=dI_N$ for $d>0$). Such matrices sit strictly between two well-studied regimes: Cartesian Hadamard submatrices of Fourier matrices (where all selected rows share one common column support) and unit weighing matrices (where nonzero phases are unrestricted on the unit circle).
+
+We establish five structural and enumerative results in this fixed-phase arbitrary-support model:
+\begin{enumerate}[label=(\arabic*),leftmargin=1.8em]
+\item \emph{Complete odd-semiprime degree classification:} For every pair of distinct odd primes $p<q$ and $N=pq$, an orthogonal binary Fourier mask of degree $d$ exists if and only if $d\in\{0,1,p,q,pq\}$, with no prime-ratio restriction.
+\item \emph{Sharp sparse-inverse Fourier approximation:} For the normalized unitary Fourier matrix $F_N$, the operator-norm infimum $\Delta(N,s)=\inf\{\|M-F_N\|_2 : M\in\GL_N(\C),\ \text{every row of }M^{-1}\text{ has }\le s\text{ nonzeros}\}$ equals its lower bound $\sqrt{1-s/N}$ if and only if an orthogonal binary Fourier mask of degree $d=N-s$ exists, and is strictly larger otherwise. In particular, at odd semiprime $N=pq$, the floor is sharp precisely at $s\in\{pq-1,pq-p,pq-q\}$.
+\item \emph{Semiprime block rigidity and exact labeled counts:} For every distinct prime pair $p<q$ (including $p=2$) and $d\in\{p,q\}$, every orthogonal mask of degree $d$ partitions into disjoint $d\times d$ blocks $A\times B$ in which both $A,B$ are transversals modulo $d$ and at least one is a coset of the order-$d$ subgroup; this yields an exact closed-form count of all labeled masks.
+\item \emph{Mixed prime-power rigidity:} For $N=mq^b$ ($q$ prime, $b\ge 1$, $1\le m<q$), every orthogonal mask of degree $q$ partitions into disjoint $q\times q$ blocks characterized by uniform $q$-adic difference valuations $r+s=b-1$ and $m\mid (x-x')(y-y')$.
+\item \emph{Arbitrary-$N$ weight-$3$ classification:} For every integer $N\ge 1$, an orthogonal binary Fourier mask of degree $3$ exists if and only if $3\mid N$, and every such mask splits into disjoint $3\times 3$ blocks---ruling out the $4\times 4$ one-hole blocks that occur for free-phase unit weighing matrices.
+\end{enumerate}
+\end{abstract}
+
+\maketitle
+
+\section{Introduction and main results}
+\label{sec:intro}
+
+Let $N\ge 1$ be an integer, let $\zeta=\zeta_N$ be a primitive complex $N$-th root of unity, and let $F_N\in\C^{N\times N}$ be the normalized unitary Fourier matrix with entries $(F_N)_{rc}=N^{-1/2}\zeta^{rc}$ ($0\le r,c<N$). For an arbitrary binary matrix $R\in\{0,1\}^{N\times N}$, define the unnormalized entrywise masked Fourier matrix
+\begin{equation}
+\label{eq:mask-def}
+D_{rc} = R_{rc}\zeta^{rc},\qquad 0\le r,c<N.
+\end{equation}
+We say that $R$ (or $D$) is an \emph{orthogonal binary Fourier mask of degree $d$} if either $DD^*=dI_N$ or $D^*D=dI_N$.
+
+Diagonal entries force $d\in\{0,1,\ldots,N\}$. When $d=0$, squared norms force $D=0$ and $R=0$. When $d=N$, every entry of $R$ must be $1$. Whenever $d>0$, either square identity $DD^*=dI_N$ or $D^*D=dI_N$ implies that $D/\sqrt{d}$ is unitary, hence implies the other identity automatically; consequently every row and every column of $R$ contains exactly $d$ ones.
+
+This problem bridges two classical lines of research. On the rigid side, \emph{complex Hadamard submatrices} of $F_N$ select a single Cartesian rectangle $J\times K$ with $|J|=|K|=d$ (equivalently, spectral pairs in $\Z/N\Z$). At semiprime orders $N=pq$, divisor-only sizes $d\in\{1,p,q,pq\}$ follow from Bond--Glickfield--Herr~\cite[Theorem~1]{BGH19} and independently from Malikiosis--Kolountzakis~\cite[Theorem~1.2]{MK17} on Fuglede's conjecture; see also Herr--Wiegand~\cite{HW21}. In contrast, an orthogonal binary Fourier mask $R$ imposes neither Cartesian support nor block structure: row orthogonality depends on the pair-varying intersections $S_r\cap S_s$, so submatrix theorems do not apply without a global structural reduction. On the flexible side, \emph{unit weighing matrices} $\mathrm{UW}(N,d)$ allow arbitrary unit-modulus entries in place of $\zeta^{rc}$; Best--Kharaghani--Ramp~\cite{BKR13} showed that $\mathrm{UW}(N,3)$ exists for every $N\notin\{1,2,5\}$ (e.g., $\mathrm{UW}(35,3)$ exists via $3\times 3$ and $4\times 4$ blocks), whereas our Theorem~\ref{thm:weight3} shows that fixed Fourier phases restrict $d=3$ to $3\mid N$.
+
+A direct analytic motivation comes from sparse inverse approximation of the discrete Fourier transform. For $N\ge 2$ and an integer row-sparsity budget $1\le s\le N-1$, define
+\begin{equation}
+\label{eq:delta-def}
+\Delta(N,s) = \inf\bigl\{\|M - F_N\|_2 : M\in\GL_N(\C),\ \text{every row of } M^{-1}\text{ has at most }s\text{ nonzeros}\bigr\}.
+\end{equation}
+Every admissible matrix satisfies the elementary lower bound $\Delta(N,s)\ge \sqrt{1-s/N}$. Our first main result links sharpness of this bound directly to orthogonal binary Fourier masks.
+
+\begin{theorem}[Sharpness of the inverse-row spectral floor]
+\label{thm:inverse-row}
+Let $N\ge 2$ and $1\le s\le N-1$, and put $t=s/N$ and $a=\sqrt{1-t}$. Then
+\[
+\Delta(N,s) \ge \sqrt{1-\frac{s}{N}},
+\]
+with equality if and only if there exists an orthogonal binary Fourier mask $R$ of degree $d=N-s$. Moreover:
+\begin{enumerate}[label=(\alph*),leftmargin=2em]
+\item If such a mask $R$ exists, set $C=F_N\circ R$ and $A=F_N-C$; then $A$ is invertible, the matrix $M = t(A^*)^{-1}$ (with $M^{-1}=t^{-1}A^*$) attains $\|M-F_N\|_2=a$, its inverse has exactly $s$ nonzeros in every row and column, and every minimizer attaining $\|M-F_N\|_2=a$ has this form.
+\item If no such mask exists, then the infimum is strictly separated from the floor: $\Delta(N,s)>\sqrt{1-s/N}$.
+\end{enumerate}
+\end{theorem}
+
+For any divisor $d\mid N$, a standard divisor-block construction (Section~\ref{sec:prelim}) produces an orthogonal binary Fourier mask of degree $d$, giving $\Delta(N,N-d)=\sqrt{d/N}$ for every proper divisor $d\mid N$. Whether $d\mid N$ is necessary for composite $N$ is a delicate global compatibility question. We settle it completely for all odd semiprimes.
+
+\begin{theorem}[Odd-semiprime degree classification]
+\label{thm:odd-semiprime}
+Let $p<q$ be distinct odd primes, let $N=pq$, and let $\zeta$ be any primitive complex $N$-th root of unity. There exists a binary $N\times N$ matrix $R$ such that $D_{rc}=R_{rc}\zeta^{rc}$ satisfies $DD^*=dI_N$ (or $D^*D=dI_N$) if and only if
+\begin{equation}
+\label{eq:semiprime-deg}
+d \in \{0, 1, p, q, pq\}.
+\end{equation}
+Equivalently, for $1\le s\le pq-1$,
+\[
+\Delta(pq,s) = \sqrt{1-\frac{s}{pq}} \iff s \in \{pq-1,\; pq-p,\; pq-q\},
+\]
+with strict inequality $\Delta(pq,s)>\sqrt{1-s/(pq)}$ at every other sparsity budget $s$.
+\end{theorem}
+
+Theorem~\ref{thm:odd-semiprime} asserts \emph{existence} at each allowed degree (clearly not every binary matrix of degree $d\in\{1,p,q\}$ is orthogonal). At the nontrivial divisor degrees $d\in\{p,q\}$, we go further and classify \emph{all} orthogonal support patterns and count them exactly, including even semiprimes $N=2q$.
+
+\begin{theorem}[Semiprime block rigidity and exact labeled counts]
+\label{thm:pq-rigidity}
+Let $p<q$ be distinct primes (including $p=2$), $N=pq$, $d\in\{p,q\}$, and $k=N/d$.
+\begin{enumerate}[label=(\alph*),leftmargin=2em]
+\item \emph{(Block rigidity)} Every orthogonal binary Fourier mask $R$ of degree $d$ decomposes into $k$ disjoint $d\times d$ blocks $A_i\times B_i$ ($1\le i\le k$), where $A_1,\ldots,A_k$ and $B_1,\ldots,B_k$ partition $\Z/N\Z$.
+\item \emph{(Local block characterization)} A $d\times d$ block $A\times B$ has orthogonal Fourier rows and columns if and only if both $A$ and $B$ are transversals modulo $d$ and at least one of $A,B$ is a coset of the order-$d$ subgroup $k\Z/N\Z$.
+\item \emph{(Exact labeled count)} The total number of labeled $N\times N$ orthogonal binary Fourier masks of degree $d$ is
+\begin{equation}
+\label{eq:labeled-count}
+\mathcal{M}(pq,d) = \sum_{\substack{0\le a,b\le k\\ a+b\ge k}} P_a P_b\, (b)_{k-a}\, a!,
+\end{equation}
+where $(b)_h = b!/(b-h)!$ and
+\begin{equation}
+\label{eq:Pa-def}
+P_a = \binom{k}{a}\sum_{j=0}^{k-a} (-1)^j \binom{k-a}{j}\bigl((k-a-j)!\bigr)^{d-1}.
+\end{equation}
+\end{enumerate}
+\end{theorem}
+
+A similar prime-degree rigidity holds across mixed prime-power orders $N=mq^b$ whenever $m<q$.
+
+\begin{theorem}[Fixed-degree rigidity at $N=mq^b$]
+\label{thm:mqb}
+Let $N=mq^b$, where $q$ is prime, $b\ge 1$, and $1\le m<q$. Every orthogonal binary Fourier mask of degree $d=q$ decomposes into $N/q$ disjoint $q\times q$ blocks $A\times B$. Moreover, a $q\times q$ block $A\times B$ is valid if and only if there exist nonnegative integers $r,s$ with $r+s=b-1$ such that:
+\begin{enumerate}[label=(\roman*),leftmargin=2em]
+\item $v_q(x-x')=r$ for all distinct $x,x'\in A$, and $v_q(y-y')=s$ for all distinct $y,y'\in B$; and
+\item $m\mid (x-x')(y-y')$ for all $x,x'\in A$ and $y,y'\in B$.
+\end{enumerate}
+\end{theorem}
+
+Finally, at weight $d=3$, we resolve existence and block structure for \emph{arbitrary} $N\ge 1$.
+
+\begin{theorem}[Weight-$3$ Fourier masks for arbitrary $N$]
+\label{thm:weight3}
+Let $N\ge 1$ be any integer. An orthogonal binary Fourier mask of degree $d=3$ exists if and only if $3\mid N$. Moreover, every orthogonal binary Fourier mask of degree $3$ decomposes into $N/3$ disjoint $3\times 3$ blocks.
+\end{theorem}
+
+The paper is structured as follows. Section~\ref{sec:prelim} records the divisor-block construction, CRT coordinates, and classical prime-cycle cancellation. Section~\ref{sec:dense} proves the low-range and dense-range exclusions ($d<q$ and $d>p+q-1$) at odd semiprimes. Section~\ref{sec:window} introduces our global cycle-propagation lemma and cross-row incidence capacity bound to close the entire narrow window $q<d\le q+p-1$, completing Theorem~\ref{thm:odd-semiprime}. Section~\ref{sec:inverse} proves Theorem~\ref{thm:inverse-row} together with its prime and codimension-two corollaries. Section~\ref{sec:rigidity} proves Theorems~\ref{thm:pq-rigidity}, \ref{thm:mqb}, and~\ref{thm:weight3}. Section~\ref{sec:discussion} compares these results with prior literature and states open problems.
+
+\section{Divisor constructions, CRT coordinates, and two-prime cancellation}
+\label{sec:prelim}
+
+\subsection{Explicit divisor-block masks}
+For any positive divisor $d\mid N$, set $m=N/d$ and partition $\{0,\ldots,N-1\}$ into $m$ blocks of size $d$:
+\begin{equation}
+\label{eq:divisor-blocks}
+I_t = \{td+u : 0\le u<d\},\qquad
+J_t = \{t+\ell m : 0\le \ell<d\},\qquad 0\le t<m.
+\end{equation}
+Define $R_{rc}=1$ if $(r,c)\in \bigcup_{t=0}^{m-1} (I_t\times J_t)$ (equivalently $\lfloor r/d\rfloor \equiv c\pmod m$), and $R_{rc}=0$ otherwise. Every row and column has $d$ ones, and on block $t$:
+\[
+\zeta^{(td+u)(t+\ell m)} = \zeta^{(td+u)t}(\zeta^m)^{u\ell}
+\]
+because $td\ell m = t\ell N$. Since $\zeta^m$ is a primitive $d$-th root of unity, each $d\times d$ block is a diagonal unitary times an unnormalized $d\times d$ Fourier matrix, whose row and column Grams equal $dI_d$. Because the blocks occupy disjoint rows and columns, $DD^*=D^*D=dI_N$. Together with $R=0$ ($d=0$), this supplies sufficiency for every $d\mid N$ (in particular $d\in\{0,1,p,q,pq\}$ in Theorem~\ref{thm:odd-semiprime}).
+
+\subsection{CRT coordinates and binary two-prime cancellation}
+Let $p<q$ be distinct primes and $N=pq$. Choose the Chinese remainder idempotents $e_p = q(q^{-1}\bmod p)$ and $e_q = p(p^{-1}\bmod q)$ in $\Z/N\Z$. Writing original indices as $r = a e_p + b e_q$ and $c = u e_p + v e_q$ with $a,u\in\Z/p\Z$ and $b,v\in\Z/q\Z$, we have the exact identity
+\begin{equation}
+\label{eq:crt-phase}
+\zeta^{rc} = \alpha^{au}\beta^{bv},\qquad \alpha = \zeta^{e_p},\quad \beta = \zeta^{e_q},
+\end{equation}
+where $\alpha$ is a primitive $p$-th root of unity and $\beta$ is a primitive $q$-th root of unity. No phases are modified: this is purely a coordinate relabeling of $\Z/N\Z\cong \Z/p\Z\times\Z/q\Z$.
+
+For a binary mask $R$, denote by $S_r\subseteq \Z/p\Z\times\Z/q\Z$ the column support of row $r$ and by $T_c$ the row support of column $c$. Define the row groups, column $p$-fibers, and column $q$-lines by
+\[
+G_a = \{(a,b) : b\in\Z/q\Z\},\qquad
+F_v = \{(u,v) : u\in\Z/p\Z\},\qquad
+L_u = \{(u,v) : v\in\Z/q\Z\}.
+\]
+The orthogonality of two distinct rows $r=(a,b)$ and $s=(a',b')$ reads
+\begin{equation}
+\label{eq:row-orth}
+\sum_{(u,v)\in S_r\cap S_s} \alpha^{(a-a')u}\beta^{(b-b')v} = 0.
+\end{equation}
+We recall the classical cyclotomic consequences (due to de Bruijn~\cite{deB53} and Lam--Leung~\cite[Theorem~3.3 and Corollary~3.4]{LL00}):
+\begin{enumerate}[label=(C\arabic*),leftmargin=2.4em]
+\item \emph{Same-group balance ($a=a'$, $b\neq b'$):} Equation~\eqref{eq:row-orth} becomes $\sum_{v\in\Z/q\Z} |S_r\cap S_s\cap F_v|\,\beta^{(b-b')v}=0$. Since $\Phi_q(X)=\sum_{v=0}^{q-1}X^v$ is irreducible over $\Q$, the fiber overlap count $|S_r\cap S_s\cap F_v|$ is independent of $v\in\Z/q\Z$. In particular, $|S_r\cap S_s|$ is a multiple of $q$.
+\item \emph{Same-$b$ balance ($a\neq a'$, $b=b'$):} Symmetrically, the line overlap count $|S_r\cap S_s\cap L_u|$ is independent of $u\in\Z/p\Z$, and $|S_r\cap S_s|$ is a multiple of $p$.
+\item \emph{Primitive binary two-prime cancellation ($a\neq a'$, $b\neq b'$):} By~\cite[Theorem~3.3]{LL00}, every vanishing sum of $pq$-th roots of unity with nonnegative integer weights is a nonnegative integer linear combination of full $p$-cycles and full $q$-cycles; equivalently, writing the indicator array $M_{uv}=\mathbf{1}_{(u,v)\in S_r\cap S_s}\in\{0,1\}$ in the cyclotomic ring $\Z[\alpha,\beta]$, vanishing of $\sum_{u,v}M_{uv}\alpha^{(a-a')u}\beta^{(b-b')v}$ forces $M_{uv} = A_u + B_v$ for rational functions of one coordinate. Since $M_{uv}\in\{0,1\}$, every pair of intersecting $p$- and $q$-cycles would create entry $2$, so $S_r\cap S_s$ must be either a union of complete $p$-fibers $F_v$ or a union of complete $q$-lines $L_u$ (including the empty set).
+\end{enumerate}
+Because $D^*D=dI_N$ holds simultaneously whenever $d>0$, the exact dual properties hold for column supports $T_c$.
+
+\section{Low-range and dense-range exclusions at odd semiprimes}
+\label{sec:dense}
+
+Throughout Sections~\ref{sec:dense} and~\ref{sec:window}, let $p<q$ be distinct odd primes, $N=pq$, and let $R$ be an orthogonal binary Fourier mask of degree $d$.
+
+\begin{proposition}[Low range $0<d<q$]
+\label{prop:low-range}
+If $0<d<q$, then $d\in\{1,p\}$.
+\end{proposition}
+
+\begin{proof}
+By~(C1), distinct rows in a common group $G_a$ have overlap size divisible by $q$; since $d<q$, their supports are pairwise disjoint. Thus $qd = \sum_{r\in G_a}|S_r| \le pq$, giving $d\le p$. If $1<d<p$, then by~(C1)--(C3) every nonempty overlap of two distinct rows must have size at least $p>d$, so all $pq$ row supports are pairwise disjoint, giving $pqd\le pq$ and $d\le 1$, contradiction.
+\end{proof}
+
+\begin{proposition}[Dense range $p+q-1<d<pq$]
+\label{prop:dense-range}
+No orthogonal binary Fourier mask exists with $p+q-1<d<pq$.
+\end{proposition}
+
+\begin{proof}
+Suppose $p+q-1<d<pq$. Fix any row $r=(a,b)$ and any column $c\in S_r$. At most $p+q-1$ rows agree with $r$ in at least one coordinate ($a'=a$ or $b'=b$). Since $|T_c|=d>p+q-1$, some row $s\in T_c$ differs from $r$ in both coordinates. By~(C3), $S_r\cap S_s$ is a union of complete $p$-fibers or complete $q$-lines containing $c$, so $S_r$ contains either the full $p$-fiber or the full $q$-line through $c$. Applying this to every $c\in S_r$ yields
+\begin{equation}
+\label{eq:dense-decomp}
+S_r = (A_r\times\Z/q\Z)\cup(\Z/p\Z\times B_r),\qquad
+d = \ell_r q + (p-\ell_r)f_r,
+\end{equation}
+where $A_r\subsetneq\Z/p\Z$ and $B_r\subsetneq\Z/q\Z$ are the maximal sets of complete $q$-lines and complete $p$-fibers contained in $S_r$, with $\ell_r=|A_r|<p$ and $f_r=|B_r|<q$.
+
+For any two distinct rows $r,r'\in G_a$, the sets $B_r$ and $B_{r'}$ are disjoint: a common complete $p$-fiber $F_v$ gives $|S_r\cap S_{r'}\cap F_v|=p$, and~(C1) forces $|S_r\cap S_{r'}\cap F_w|=p$ for every $w\in\Z/q\Z$, implying $d\ge pq$, contradiction.
+
+\smallskip
+\noindent\emph{Case 1: $d=kq$ with $2\le k\le p-1$.} From~\eqref{eq:dense-decomp}, $(k-\ell_r)q=(p-\ell_r)f_r$. Since $1\le p-\ell_r\le p<q$, primality of $q$ forces $q\mid f_r$, hence $f_r=0$ and $\ell_r=k$. Every row support is therefore $A_r\times\Z/q\Z$ with $|A_r|=k$. Fixing $b\in\Z/q\Z$, for any two distinct rows $(a,b)$ and $(a',b)$, property~(C2) requires $|A_{(a,b)}\cap A_{(a',b)}|\in\{0,p\}$; since $k<p$, the $p$ sets $A_{(a,b)}$ ($a\in\Z/p\Z$) are pairwise disjoint $k$-subsets of $\Z/p\Z$, forcing $pk\le p$ and contradicting $k\ge 2$.
+
+\smallskip
+\noindent\emph{Case 2: $q\nmid d$.} Then $f_r\ge 1$ for every row $r$. Within each row group $G_a$, the $q$ nonempty sets $B_{(a,b)}$ ($b\in\Z/q\Z$) are pairwise disjoint subsets of $\Z/q\Z$, so every $B_{(a,b)}=\{\pi_a(b)\}$ is a singleton for a permutation $\pi_a$ of $\Z/q\Z$. Then $d = p + \ell_r(q-1)$, forcing $\ell_r=\ell$ to be constant across all rows, with $1\le\ell\le p-1$ since $p+q-1<d<pq$.
+
+For distinct rows $r,r'\in G_a$, their two distinct special fibers each have overlap $\ell$, while any third fiber $F_w$ ($w\notin\{\pi_a(b),\pi_a(b')\}$) has overlap $|A_r\cap A_{r'}|$. By~(C1), $|A_r\cap A_{r'}|=\ell=|A_r|$, so $A_r=A_{r'}$. Thus every group $G_a$ shares a common $\ell$-subset $A_a\subset\Z/p\Z$. Let $h_u$ be the number of groups $a\in\Z/p\Z$ with $u\in A_a$. Counting the degree of any column $(u,v)$ gives
+\[
+d = h_u q + (p - h_u) = p + h_u(q-1),
+\]
+so $h_u=\ell$ for every $u\in\Z/p\Z$. Since $0<\ell<p$, the sets $A_a$ cannot all be equal (otherwise $h_u\in\{0,p\}$). Pick $a\neq a'$ with $A_a\neq A_{a'}$, and choose $r=(a,b)\in G_a$ and $s=(a',b')\in G_{a'}$ with $b'\neq b$ and $\pi_{a'}(b')\neq \pi_a(b)$ (at most two choices of $b'$ are forbidden, while $q\ge 5$). In the primitive overlap $S_r\cap S_s$, each of the two special fibers $\pi_a(b),\pi_{a'}(b')$ has overlap size $\ell\in\{1,\ldots,p-1\}$, whereas every other fiber has overlap $|A_a\cap A_{a'}|<\ell$. Thus $S_r\cap S_s$ is neither a union of full $p$-fibers nor a union of full $q$-lines, contradicting~(C3).
+\end{proof}
+
+\section{Cycle propagation and the narrow window $q<d\le q+p-1$}
+\label{sec:window}
+
+Propositions~\ref{prop:low-range} and~\ref{prop:dense-range} reduce the proof of Theorem~\ref{thm:odd-semiprime} to excluding the narrow window
+\[
+q < d \le q + p - 1.
+\]
+Note that every $d$ in this window satisfies $q<d<2q$, so by~(C1) any two distinct rows in the same group $G_a$ have fiber overlap $|S_r\cap S_s\cap F_v|\in\{0,1\}$ for all $v$.
+
+\begin{lemma}[Cycle-propagation lemma]
+\label{lem:cycle-prop}
+If $q<d<pq$, then at least one row support $S_r$ contains a complete $q$-line $L_u$.
+\end{lemma}
+
+\begin{proof}
+Suppose for contradiction that no row support contains a complete $q$-line. Call a supported entry $(r,c)$ with $r=(a,b)$ and $c=(u,v)$ \emph{deficient} if $F_v\not\subseteq S_r$. If some row $s\in T_c$ differed from $r$ in both coordinates, then~(C3) would force $S_r$ to contain either $L_u$ (impossible by assumption) or $F_v$ (impossible by deficiency). Therefore $T_c$ is contained in the coordinate cross
+\[
+X_r := \{(a,b') : b'\in\Z/q\Z\} \cup \{(a',b) : a'\in\Z/p\Z\}.
+\]
+Since $|T_c|=d>q$, column $c$ has at least one supporter $s=(a',b)$ with $a'\neq a$. For any other supporter $t=(a,b')\in G_a\cap T_c$ with $b'\neq b$, rows $t$ and $s$ differ in both coordinates and share $c$; since no $q$-line exists,~(C3) forces $F_v\subseteq S_t$ (and $F_v\subseteq S_s$).
+
+There can be at most one such row $t\in G_a\setminus\{r\}$: if two distinct rows in $G_a$ both contained $F_v$, their overlap would have size $p$ in $F_v$, forcing overlap $pq>d$ by~(C1), impossible. Hence $|T_c\cap G_a|\le 2$ (consisting of $r$ and at most one $t$), while at most $p-1$ rows of $X_r$ lie outside $G_a$. Thus
+\[
+d = |T_c| \le 2 + (p-1) = p+1 < q+1 \le d,
+\]
+since $p<q$ are distinct odd primes (so $q\ge p+2$). This contradiction proves that no deficient entry exists.
+
+Consequently, every row support $S_r$ is a union of complete $p$-fibers. Within any group $G_a$, distinct rows must use disjoint sets of $p$-fibers (again by~(C1) and $d<pq$). Since each row has $d>q>p$ entries, each row uses at least $2$ complete $p$-fibers, requiring at least $2q$ fibers in $\Z/q\Z$, contradiction.
+\end{proof}
+
+\begin{proposition}[Interior exclusion $q<d<q+p-1$]
+\label{prop:interior}
+No orthogonal binary Fourier mask exists with $q<d<q+p-1$.
+\end{proposition}
+
+\begin{proof}
+Write $d=q+t$ with $1\le t\le p-2$. By Lemma~\ref{lem:cycle-prop}, some row $r=(a,b)$ contains a complete $q$-line $L_u$ plus $t$ extra columns outside $L_u$. Since $d<2q$, $L_u$ is the unique complete $q$-line in $S_r$. Because completing any $p$-fiber beyond its single baseline entry in $L_u$ requires $p-1>t$ extra columns, $S_r$ contains no complete $p$-fiber. Furthermore, $S_r$ meets at most $1+t\le p-1$ distinct $q$-lines, so $S_r$ is disjoint from at least one $q$-line $L_w$.
+
+Pick any extra column $c\in S_r\setminus L_u$. Consider any row $s=(a',b')$ with $a'\neq a$:
+\begin{itemize}[leftmargin=1.5em]
+\item If $b'\neq b$, then $s$ cannot support $c$: by~(C3), a primitive overlap containing $c$ would force either the $q$-line or the $p$-fiber through $c$ into $S_r$, neither of which lies in $S_r$.
+\item If $b'=b$, then~(C2) forces $|S_r\cap S_s\cap L_{u'}|$ to be constant over all $u'\in\Z/p\Z$. Since $S_r\cap L_w=\varnothing$, this constant is $0$, so $S_r\cap S_s=\varnothing$ and $s\notin T_c$.
+\end{itemize}
+Hence $T_c\subseteq G_a$, yielding $d=|T_c|\le q$, contradiction.
+\end{proof}
+
+\begin{proposition}[Boundary cross-row lemma]
+\label{prop:cross}
+If $d=q+p-1$, then every row $r$ containing a complete $q$-line $L_u$ must be an exact coordinate cross $S_r = L_u\cup F_v$ for some $v\in\Z/q\Z$.
+\end{proposition}
+
+\begin{proof}
+Let $r=(a,b)$ contain its unique complete $q$-line $L_u$, and let $T=S_r\setminus L_u$ ($|T|=p-1$). Suppose for contradiction that $S_r$ contains no complete $p$-fiber. For every $c\in T$, no row differing from $r$ in both coordinates can support $c$ (by~(C3), since $S_r$ contains neither the $q$-line nor the $p$-fiber through $c$). Therefore $T_c\subseteq X_r$, where $|X_r|=q+p-1=d$. Regularity $|T_c|=d$ forces $T_c = X_r$ for \emph{every} $c\in T$.
+
+Since $p\ge 3$, $|T|=p-1\ge 2$; pick two distinct columns $c_1=(u_1,v_1)$ and $c_2=(u_2,v_2)$ in $T$, and set $\delta_u=u_1-u_2$, $\delta_v=v_1-v_2$. Their column Gram entry on their common support $X_r$ is
+\begin{equation}
+\label{eq:cross-gram}
+\sum_{(x,y)\in X_r} \alpha^{x\delta_u}\beta^{y\delta_v}
+= \alpha^{a\delta_u}\beta^{b\delta_v}\bigl(q\,\mathbf{1}_{\delta_v=0} + p\,\mathbf{1}_{\delta_u=0} - 1\bigr),
+\end{equation}
+by inclusion--exclusion on the horizontal line $G_a$ and vertical fiber $\{(a',b)\}$ meeting at $(a,b)$. Because $c_1\neq c_2$, the parenthetical factor equals $-1$ (if $\delta_u,\delta_v\neq 0$), $p-1$ (if $\delta_u=0,\delta_v\neq 0$), or $q-1$ (if $\delta_u\neq 0,\delta_v=0$)---all nonzero---contradicting column orthogonality.
+
+Thus $S_r$ contains a complete $p$-fiber $F_v$. Since $|F_v\setminus L_u|=p-1=|T|$, all $p-1$ extras lie in $F_v$, giving $S_r=L_u\cup F_v$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:odd-semiprime}]
+Sufficiency is given by~\eqref{eq:divisor-blocks} and $R=0$. By Propositions~\ref{prop:low-range}, \ref{prop:dense-range}, and~\ref{prop:interior}, it remains only to rule out $d=q+p-1$.
+
+Assume $d=q+p-1$. By Lemma~\ref{lem:cycle-prop} and Proposition~\ref{prop:cross}, there exists a cross row $r=(a,b)$ with $S_r=L_u\cup F_v$. Put $T=F_v\setminus L_u$, so $|T|=p-1$. The total number of incidences between all $pq$ rows and the columns of $T$ must equal
+\begin{equation}
+\label{eq:inc-req}
+\sum_{c\in T}|T_c| = (p-1)d = (p-1)(q+p-1).
+\end{equation}
+We upper-bound the same incidence sum row group by row group:
+\begin{itemize}[leftmargin=1.5em]
+\item \emph{The group $G_a$ of $r$:} Row $r$ contributes $p-1$ incidences to $T$. Since $d<2q$,~(C1) implies that every other row $t\in G_a\setminus\{r\}$ meets $S_r$ in at most $1$ point of $F_v$, hence in at most $1$ point of $T$. Thus $G_a$ contributes at most $(p-1)+(q-1)=q+p-2$ incidences.
+\item \emph{Each other group $G_{a'}$ ($a'\neq a$):} First, if a row $s=(a',b')$ with $b'\neq b$ meets $T$, then~(C3) forces $F_v\subseteq S_s$ (as $S_r$ contains no $q$-line through any $c\in T$). At most one such row $s\in G_{a'}$ can exist, since two distinct rows in $G_{a'}$ containing $F_v$ would have overlap $pq>d$ by~(C1). Second, consider the unique row $s_0=(a',b)\in G_{a'}$ with the same second coordinate $b$. If $S_{s_0}\cap T\neq\varnothing$, then~(C2) forces $|S_r\cap S_{s_0}\cap L_{u'}|$ to be constant across all $u'\in\Z/p\Z$; since $|S_r\cap L_{u'}|=1$ for every $u'\neq u$, this constant must be $1$, forcing $T\subseteq S_{s_0}$.
+
+Critically, a primitive supporter $s$ ($b'\neq b$) and the same-$b$ supporter $s_0$ cannot \emph{both} meet $T$: if both existed, they would be distinct rows of $G_{a'}$ sharing all $p-1\ge 2$ points of $T\subset F_v$, contradicting $|S_s\cap S_{s_0}\cap F_v|\le 1$ (since $d<2q$). Hence at most one row of $G_{a'}$ meets $T$, contributing at most $|T|=p-1$ incidences. Across all $p-1$ groups $G_{a'}$ ($a'\neq a$), the total contribution is at most $(p-1)^2$.
+\end{itemize}
+Summing both bounds and subtracting from~\eqref{eq:inc-req} yields the excess
+\[
+(p-1)(q+p-1) - \bigl(q+p-2 + (p-1)^2\bigr) = (p-2)(q-1) > 0,
+\]
+contradiction. This completes the degree classification~\eqref{eq:semiprime-deg}. The inverse-row consequence follows immediately from Theorem~\ref{thm:inverse-row} proved next.
+\end{proof}
+
+\begin{remark}[Why global column propagation is essential]
+\label{rem:fano}
+At $(p,q,d)=(11,23,33)$, there exists an explicit $23\times 253$ \emph{rectangular} binary Fourier-masked matrix $D_{\mathrm{rect}}$ (rows restricted to one group $G_a$, with two row-overlap clique components of sizes $7$ and $16$: five fibers carry Fano-plane lines on the $7$-row component, eighteen fibers share a singleton, and the $16$-row component uses disjoint baselines and $160$ private extras) satisfying the single-sided identity $D_{\mathrm{rect}}D_{\mathrm{rect}}^* = 33 I_{23}$. Thus a purely local row-group clique argument cannot eliminate $d=q+p-1$ when $q$ is small relative to $p^2$; the full square column-degree propagation in Lemma~\ref{lem:cycle-prop} and Propositions~\ref{prop:cross} is genuinely necessary.
+\end{remark}
+
+\section{Sharp sparse-inverse spectral approximation}
+\label{sec:inverse}
+
+We now prove Theorem~\ref{thm:inverse-row} and record its consequences for prime orders and codimension two.
+
+\begin{proof}[Proof of Theorem~\ref{thm:inverse-row}]
+Write $F=F_N$, $B=M^{-1}$, $E=M-F$, and let $b_i\in\C^{1\times N}$ denote row $i$ of $B$, with support $S_i$ of size $t_i\le s$ and norm $x_i=\|b_i\|_2>0$. Using $b_i E = e_i^T - b_i F$, $FF^*=I_N$, and Cauchy--Schwarz on $(b_i F)_i = \sum_{j\in S_i} (b_i)_j F_{ji}$ (where $|F_{ji}|=N^{-1/2}$):
+\begin{align}
+\|E\|_2^2 x_i^2 &\ge \|b_i E\|_2^2 = \|e_i^T - b_i F\|_2^2
+= 1 + \|b_i\|_2^2 - 2\operatorname{Re}(b_i F)_i \nonumber\\
+&\ge 1 + x_i^2 - 2\sqrt{t_i/N}\, x_i. \label{eq:one-row}
+\end{align}
+Dividing by $x_i^2$ and completing the square yields
+\[
+\|E\|_2^2 \ge \left(\frac{1}{x_i} - \sqrt{\frac{t_i}{N}}\right)^2 + 1 - \frac{t_i}{N} \ge 1 - \frac{s}{N} = a^2,
+\]
+proving $\Delta(N,s)\ge a$.
+
+Suppose $\|E\|_2 = a$ is attained by $M$. Then equality holds throughout~\eqref{eq:one-row} for every $i$, forcing $t_i=s$, $x_i=t^{-1/2}$ (where $t=s/N$), and equality with positive real phase in Cauchy--Schwarz:
+\[
+(b_i)_j = t^{-1}\overline{F_{ji}}\,\mathbf{1}_{j\in S_i}.
+\]
+Setting $A_{ji} = F_{ji}\mathbf{1}_{j\in S_i}$, each column of $A$ has exactly $s$ nonzeros and $B = t^{-1}A^*$. Crucially, we now use all rows simultaneously: $H := a^2 I_N - EE^*$ is positive semidefinite, and equality in the first inequality of~\eqref{eq:one-row} states $b_i H b_i^* = 0$ for every $i$. Thus the positive semidefinite matrix $BHB^*$ has zero diagonal, hence $BHB^*=0$. Because $B$ is invertible, $EE^*=a^2 I_N$. Multiplying on left and right by $B$ and $B^*$ and substituting $BE=I_N-BF$, $FF^*=I_N$, and $a^2=1-t$ gives
+\[
+I_N - BF - F^*B^* + t BB^* = 0.
+\]
+Substituting $B=t^{-1}A^*$ and multiplying by $t$ yields $t I_N - A^*F - F^*A + A^*A = 0$. Setting the complementary mask $C = F - A = F\circ R$ (where $R\in\{0,1\}^{N\times N}$ has $N-s$ ones per column), we obtain
+\begin{equation}
+\label{eq:C-unitary}
+C^*C = (F-A)^*(F-A) = I_N - F^*A - A^*F + A^*A = (1-t)I_N = a^2 I_N.
+\end{equation}
+Hence $D = \sqrt{N}\,C$ satisfies $D^*D = (N-s)I_N$, so $R$ is an orthogonal binary Fourier mask of degree $d=N-s$. Since $C/a$ is unitary, $CC^*=a^2 I_N$ as well, forcing every row of $R$ to have $N-s$ ones (and every row/column of $M^{-1}=t^{-1}A^*$ to have $s$ nonzeros).
+
+Conversely, let $R$ be an orthogonal binary Fourier mask of degree $d=N-s$, and put $C=F\circ R$ and $A=F-C$. Since $\|C\|_2 = a < 1$ and $F$ is unitary, $\|Ax\|_2\ge (1-a)\|x\|_2$ for all $x\in\C^N$, so $A$ is invertible. Put $B=t^{-1}A^*$ and $M=B^{-1}=t(A^*)^{-1}$. Every row of $B$ has $s$ nonzeros, and reversing the algebra from~\eqref{eq:C-unitary} yields $BEE^*B^* = a^2 BB^*$, hence $EE^*=a^2 I_N$ and $\|M-F\|_2 = a$. (Notice also that the singular values of $M$ lie in $[1-a,1+a]$, so $\kappa_2(M)\le (1+a)/(1-a)$.)
+
+Finally, to prove~(b), suppose $M_k\in\GL_N(\C)$ are admissible and $\|M_k-F\|_2\to a<1$. Then $\{M_k\}$ is bounded, so a subsequence converges to some $M_\infty\in\C^{N\times N}$. Since $\sigma_{\min}(M_k)\ge 1-\|M_k-F\|_2$ is bounded uniformly away from $0$ for large $k$, $M_\infty$ is invertible and $M_k^{-1}\to M_\infty^{-1}$. Because the set of matrices whose every row has at most $s$ nonzeros is closed (a finite union of coordinate subspaces), $M_\infty$ is admissible and attains $\|M_\infty-F\|_2=a$, yielding a mask $R$ by the necessity proof. Thus nonexistence of a mask implies $\Delta(N,s)>a$.
+\end{proof}
+
+\begin{corollary}[Divisors, codimension two, and prime dimensions]
+\label{cor:easy-cases}
+For $N\ge 2$:
+\begin{enumerate}[label=(\arabic*),leftmargin=2em]
+\item For every proper divisor $d\mid N$, $\Delta(N,N-d)=\sqrt{d/N}$. In particular, $\Delta(N,N-1)=1/\sqrt{N}$ for all $N\ge 2$.
+\item For $N\ge 3$, $\Delta(N,N-2)=\sqrt{2/N}$ if $N$ is even, and $\Delta(N,N-2)>\sqrt{2/N}$ if $N$ is odd.
+\item If $N=p$ is prime, then $\Delta(p,s)=\sqrt{1-s/p}$ if and only if $s=p-1$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Part~(1) follows from~\eqref{eq:divisor-blocks} and Theorem~\ref{thm:inverse-row}. For~(2) with $N$ odd, any orthogonal mask of degree $2$ has column overlap sums $\sum_{r\in T}\zeta^{r(k-j)}=0$ with $|T|\in\{0,1,2\}$; neither $|T|=1$ nor $|T|=2$ can vanish because $-1$ is not an $N$-th root of unity when $N$ is odd, so all $N$ column supports of size $2$ would be pairwise disjoint, impossible. For~(3), if $N=p$ is prime and $2\le d\le p-1$, then by irreducibility of $\Phi_p$ no nonempty proper subset of $p$-th roots sums to $0$, so all $p$ column supports of size $d$ must be pairwise disjoint, forcing $pd\le p$ and contradicting $d\ge 2$.
+\end{proof}
+
+\section{Block rigidity, labeled enumeration, and weight-$3$ masks}
+\label{sec:rigidity}
+
+\subsection{Semiprime rigidity and labeled counts (Theorem~\ref{thm:pq-rigidity})}
+
+\begin{proof}[Proof of Theorem~\ref{thm:pq-rigidity}]
+Let $p<q$ be distinct primes (now allowing $p=2$), $N=pq$, and $d\in\{p,q\}$.
+
+\smallskip
+\noindent\emph{Step 1: Block decomposition ($K_{d,d}$ components).}
+At $d=p$, properties~(C1)--(C3) imply that every nonempty overlap of two row supports has size at least $p$, hence equals $p$; thus equal supports form isolated $K_{p,p}$ blocks (as column degree is $p$).
+
+At $d=q$, proceed by induction on the number of remaining rows after removing all isolated $K_{q,q}$ blocks; suppose the remaining active square has size $tq$ with $t\ge 1$. Within any residue class $G_a$ of rows modulo $p$, property~(C1) implies that any nonempty overlap of two distinct rows has size $q$, so they share the exact same support. If no two active rows in any class $G_a$ shared a support, each of the $p$ classes would contain at most $t$ pairwise disjoint $q$-element supports (since the active square has only $tq$ columns), giving at most $tp$ active rows and contradicting $tp<tq$ (as $p<q$).
+
+Hence some class $G_a$ contains two distinct active rows $r_1,r_2$ sharing a common support $B$ ($|B|=q$). Since $\sum_{c\in B}\zeta^{(r_1-r_2)c}=0$ and $p\mid (r_1-r_2)$ with $q\nmid (r_1-r_2)$, $B$ must be a transversal modulo $q$ (one element from each residue class mod $q$). Every row $r\in G_a$ meeting $B$ satisfies $S_r=B$ by~(C1). Now consider any row $s\notin G_a$ meeting $B$. Because $r_1\not\equiv r_2\pmod q$, at least one seed $r_i$ ($i\in\{1,2\}$) differs from $s$ modulo both $p$ and $q$. By~(C3), the nonempty primitive overlap $S_s\cap B$ is a union of complete $p$-fibers or complete $q$-lines; a complete $p$-fiber has $p$ elements with the same residue modulo $q$, impossible inside the mod-$q$ transversal $B$, so $S_s\cap B$ must be a full $q$-line and therefore exhausts $B$. Thus every row intersecting $B$ equals $B$. Column degree $q$ supplies exactly $q$ such rows, isolating a $K_{q,q}$ block $A\times B$ and completing the induction.
+
+\smallskip
+\noindent\emph{Step 2: Local block characterization.}
+Let $A\times B$ be a $d\times d$ orthogonal block ($d\in\{p,q\}$). Suppose $A$ contained two distinct rows $x\equiv x'\pmod d$; then $x-x'$ is a nonzero multiple of $d$, so every term $\zeta^{(x-x')y}$ ($y\in B$) is an $(N/d)$-th root of unity. Because $N/d$ is prime, irreducibility of $\Phi_{N/d}$ implies that a vanishing sum of $d$ $(N/d)$-th roots of unity requires $(N/d)\mid d$, impossible for distinct primes $p,q$. Thus $A$ must be a transversal modulo $d$, and by $D^*D=dI_N$, $B$ must also be a transversal modulo $d$.
+
+Now suppose $A$ is \emph{not} a coset of the order-$d$ subgroup $k\Z/N\Z$. Since $A$ is a transversal modulo $d$, two distinct elements $x,x'\in A$ must have $x\not\equiv x'\pmod k$, hence $\gcd(x-x',N)=1$. Their orthogonality $\sum_{y\in B}\zeta^{(x-x')y}=0$ is a primitive vanishing sum of $d$ roots of unity. By Lam--Leung~\cite[Theorem~3.3]{LL00}, any vanishing sum of $d$ primitive $pq$-th roots with $B$ a transversal modulo $d$ (which forbids any $k$-cycle: a $k$-cycle consists of $k$ elements congruent modulo $d$, impossible in a transversal mod $d$!) must be a single $d$-cycle, meaning all $y\in B$ share the same residue modulo $k$, i.e., $B$ is a coset of $k\Z/N\Z$. Conversely, if both $A,B$ are transversals modulo $d$ and at least one (say $B$) is a coset $y_0 + k\Z/N\Z$, then for any distinct $x,x'\in A$ we have $d\nmid (x-x')$ and
+\[
+\sum_{y\in B}\zeta^{(x-x')y} = \zeta^{(x-x')y_0}\sum_{j=0}^{d-1}(\zeta^k)^{(x-x')j} = 0,
+\]
+and symmetrically for columns (since every distinct $y,y'\in B$ has $y-y'\in k\Z/N\Z\setminus\{0\}$ and $A$ is a transversal mod $d$).
+
+\smallskip
+\noindent\emph{Step 3: Exact labeled count.}
+A partition of $\Z/N\Z$ into $k=N/d$ transversals modulo $d$ is canonically indexed by the $k$ elements in residue class $0\bmod d$. Via the Chinese remainder bijection $\Z/N\Z \cong (\Z/k\Z)\times(\Z/d\Z)$, choosing the elements in the remaining $d-1$ residue classes modulo $d$ assigned to each block corresponds bijectively to choosing a $(d-1)$-tuple of permutations $(\pi_1,\ldots,\pi_{d-1})\in S_k^{d-1}$. A block $i\in\Z/k\Z$ is a coset of $k\Z/N\Z$ precisely when $i$ is a common fixed point of all $d-1$ permutations $\pi_1,\ldots,\pi_{d-1}$.
+
+By inclusion--exclusion on the subset of common fixed points, the number of transversal partitions having \emph{exact} number $a$ of coset blocks is
+\[
+P_a = \binom{k}{a}\sum_{j=0}^{k-a}(-1)^j\binom{k-a}{j}\bigl((k-a-j)!\bigr)^{d-1},
+\]
+which is~\eqref{eq:Pa-def}. Given a row transversal partition with $a$ coset blocks and a column transversal partition with $b$ coset blocks, a pairing of the $k$ row blocks with the $k$ column blocks makes every matched block valid (by~(b)) if and only if each of the $k-a$ noncoset row blocks is matched to one of the $b$ coset column blocks. This is possible iff $b\ge k-a$ (i.e., $a+b\ge k$), in which case there are $(b)_{k-a}=b!/(b-k+a)!$ injections for the noncoset row blocks and $a!$ matchings for the remaining $a$ coset row blocks. Because distinct masks induce distinct connected $K_{d,d}$ components and hence distinct unordered block sets, summing over $a,b$ yields~\eqref{eq:labeled-count} with no overcounting.
+\end{proof}
+
+Table~\ref{tab:pq-masks} displays small exact values of~\eqref{eq:labeled-count}.
+
+\begin{table}[ht]
+\centering
+\caption{Exact labeled counts $\mathcal{M}(pq,d)$ of orthogonal binary Fourier masks at semiprime orders.}
+\label{tab:pq-masks}
+\begin{tabular}{rrrr}
+\toprule
+Order $N=pq$ & Degree $d$ & $k=N/d$ & Labeled masks $\mathcal{M}(N,d)$ \\
+\midrule
+$6$ & $2$ & $3$ & $66$ \\
+$6$ & $3$ & $2$ & $14$ \\
+$10$ & $2$ & $5$ & $37{,}080$ \\
+$10$ & $5$ & $2$ & $62$ \\
+$15$ & $3$ & $5$ & $3{,}675{,}480$ \\
+$15$ & $5$ & $3$ & $15{,}546$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Mixed prime-power rigidity at $N=mq^b$ (Theorem~\ref{thm:mqb})}
+
+\begin{proof}[Proof of Theorem~\ref{thm:mqb}]
+Let $N=mq^b$ with $q$ prime, $b\ge 1$, and $1\le m<q$, and let $R$ be an orthogonal binary Fourier mask of degree $q$.
+
+Remove any isolated $K_{q,q}$ blocks and suppose the remaining active square has size $tq$ ($t\ge 1$). Partition the active rows into $m$ classes according to their residue modulo $m$. Because $tq > tm$ (as $m<q$), some residue class modulo $m$ contains two distinct active rows $x,y$ whose supports intersect (if all supports in each class were pairwise disjoint, each class could own at most $t$ rows, totaling $\le tm < tq$).
+
+Since $m\mid (x-y)$, the phases $\zeta^{(x-y)c}$ have $q$-power order $q^{b-r}$, where $r := v_q(x-y) < b$. A nonempty vanishing sum of at most $q$ $q$-power roots of unity must have length $q$ and form a single rotated $q$-cycle; hence $S_x = S_y =: B$ ($|B|=q$), and all distinct differences $c-c'$ ($c,c'\in B$) satisfy $v_q(c-c') = b-r-1$.
+
+Now let $z$ be \emph{any} active row whose support meets $B$. By the ultrametric inequality on $v_q$, at least one difference $\delta\in\{z-x, z-y\}$ satisfies $v_q(\delta)\le r$ (since $v_q(x-y)=r$). Put $d' := b - v_q(\delta) \ge b - r \ge 1$ and write $\delta = q^{v_q(\delta)}\tilde{\delta}$ with $q\nmid \tilde{\delta}$. For all distinct $c,c'\in B$,
+\[
+v_q\bigl(\tilde{\delta}(c-c')\bigr) = b - r - 1 < b - r \le d',
+\]
+so the $q$-primary parts of $\zeta^{\delta c}$ ($c\in B$) take the form $\eta_0^{\tilde{\delta}c}$ for a primitive $q^{d'}$-th root of unity $\eta_0$, with pairwise distinct exponents $\tilde{\delta}c \pmod{q^{d'}}$.
+Because $\gcd(m,q)=1$, the cyclotomic polynomial
+\[
+\Phi_{q^{d'}}(X) = \sum_{j=0}^{q-1} X^{j q^{d'-1}}
+\]
+remains irreducible over $\Q(\zeta_m)$ (by the cyclotomic degree formula $[\Q(\zeta_{mq^{d'}}):\Q(\zeta_m)]=\varphi(q^{d'})$). Therefore any nonzero polynomial $P(X)\in\Q(\zeta_m)[X]$ of degree $<q^{d'}$ vanishing at $\eta_0$ is a nonzero multiple of $\Phi_{q^{d'}}(X)$, so for every residue class modulo $q^{d'-1}$ appearing in $P$, all $q$ shifted powers $X^{a + j q^{d'-1}}$ ($0\le j<q$) must occur with the same nonzero coefficient in $\Q(\zeta_m)$. In particular, $P$ must have at least $q$ nonzero terms. Since $S_z\cap B$ is nonempty and yields such a polynomial with $|S_z\cap B|$ terms (all exponents distinct modulo $q^{d'}$), we must have $|S_z\cap B|=q$, i.e., $S_z=B$. By column degree $q$, exactly $q$ rows support $B$, isolating a $K_{q,q}$ block and completing the induction.
+
+For the local block characterization of $A\times B$ ($|A|=|B|=q$): since $q>m$, by pigeonhole some distinct pair $x,x'\in A$ shares a residue modulo $m$. As above, orthogonality forces all distinct differences $y-y'$ ($y,y'\in B$) to have a single uniform $q$-adic valuation $s=b-1-v_q(x-x')$. Symmetrically, some pair in $B$ shares a residue modulo $m$, forcing all distinct differences $x-x'$ ($x,x'\in A$) to have a single uniform $q$-adic valuation $r$, with $r+s=b-1$. Now let $x,x'\in A$ be \emph{any} distinct pair, and set $\delta=x-x'$. Since $v_q(\delta)=r$, we have $d'=b-r=s+1$, and the $q$ values $\tilde{\delta}y\pmod{q^{s+1}}$ ($y\in B$) form a single complete congruence class modulo $q^s$, i.e., a full $\Phi_{q^{s+1}}$-progression. Because $\Phi_{q^{s+1}}(X)$ is irreducible over $\Q(\zeta_m)$, vanishing of $\sum_{y\in B}\omega_m^{\delta y}\eta_0^{\tilde{\delta}y}$ holds if and only if all $q$ coefficients $\omega_m^{\delta y}\in\Q(\zeta_m)$ are equal---which is equivalent to $m\mid \delta(y-y') = (x-x')(y-y')$ for all $y,y'\in B$. Conversely, conditions~(i) and~(ii) make every distinct row-pair inner product a constant phase times $\sum_{j=0}^{q-1}\zeta_q^j=0$, and symmetrically for columns.
+\end{proof}
+
+\subsection{Weight-$3$ Fourier masks for arbitrary $N$ (Theorem~\ref{thm:weight3})}
+
+\begin{proof}[Proof of Theorem~\ref{thm:weight3}]
+If $3\mid N$, the divisor-block construction~\eqref{eq:divisor-blocks} produces an orthogonal binary Fourier mask of degree $3$. Conversely, let $D_{rc}=R_{rc}\zeta_N^{rc}$ satisfy $DD^*=D^*D=3I_N$. Since $D$ is a unit weighing matrix of weight $3$, Best--Kharaghani--Ramp~\cite[Theorem~12]{BKR13} proves that $D$ (after row/column permutations) is a direct sum of $3\times 3$ full blocks and $4\times 4$ blocks having exactly one zero per row and column.
+
+We prove that no $4\times 4$ one-hole block can occur with Fourier entries $\zeta_N^{rc}$. Suppose for contradiction that row labels $x_1,x_2,x_3,x_4\in\Z/N\Z$ and column labels $y_1,y_2,y_3,y_4\in\Z/N\Z$ form a $4\times 4$ block whose zeros lie on the diagonal $(x_i,y_i)$ ($1\le i\le 4$). For any partition of $\{1,2,3,4\}$ into two disjoint pairs $\{i,j\}$ and $\{k,\ell\}$, the overlap of rows $x_i$ and $x_j$ consists precisely of the two columns $\{y_k,y_\ell\}$. Orthogonality of rows $x_i,x_j$ reads
+\[
+\zeta_N^{(x_i-x_j)y_k} + \zeta_N^{(x_i-x_j)y_\ell} = 0
+\iff
+(x_i-x_j)(y_k-y_\ell) \equiv \frac{N}{2}\pmod N.
+\]
+If $N$ is odd, this is immediately impossible because $-1$ is not an $N$-th root of unity.
+
+Assume now that $N$ is even, and set $e = v_2(N)\ge 1$. For every complementary pair of edges $\{i,j\}$ and $\{k,\ell\}$ of $K_4$, taking $2$-adic valuations yields
+\begin{equation}
+\label{eq:w3-val}
+v_2(x_i-x_j) + v_2(y_k-y_\ell) = e - 1.
+\end{equation}
+Let $m_x := \min_{1\le i<j\le 4} v_2(x_i-x_j)$. Consider the graph $H_x$ on $\{1,2,3,4\}$ whose edges are the pairs achieving the minimum valuation $m_x$. Since $v_2$ is ultrametric (if $v_2(a-b)>m_x$ and $v_2(b-c)>m_x$, then $v_2(a-c)>m_x$), the complement of $H_x$ is a union of cliques, and because $2$ is prime, the residue classes of $x_i/2^{m_x}\pmod 2$ partition $\{1,2,3,4\}$ into exactly two nonempty parts of sizes either $2+2$ or $1+3$, with $H_x$ the complete bipartite graph between them.
+\begin{itemize}[leftmargin=1.5em]
+\item \emph{Case 1: $2+2$ split.} Then $H_x$ is a $4$-cycle; by~\eqref{eq:w3-val}, its complementary edges in $K_4$ form a $4$-cycle of edges $\{k,\ell\}$ on $\{y_1,y_2,y_3,y_4\}$ all having maximum valuation $M_y := e-1-m_x$. Writing $y_k \equiv y_\ell \pmod{2^{M_y}}$ along this $4$-cycle, transitivity forces the remaining two edges of $K_4$ (the two diagonals of the $4$-cycle) to satisfy $v_2(y_k-y_\ell)\ge M_y$. By maximality of $M_y$, all six column differences have valuation $M_y$; by~\eqref{eq:w3-val}, all six row differences have valuation $m_x$, impossible for four integers modulo $2^{m_x+1}$ (by pigeonhole, two of them agree mod $2^{m_x+1}$).
+\item \emph{Case 2: $1+3$ split.} Say vertex $1$ is separated from $\{2,3,4\}$, so $v_2(x_1-x_j)=m_x$ for $j\in\{2,3,4\}$, while $v_2(x_j-x_k) > m_x$ for distinct $j,k\in\{2,3,4\}$. By~\eqref{eq:w3-val}, the complementary edges on $y$ satisfy $v_2(y_j-y_k) = M_y$ for all three pairs in $\{2,3,4\}$, producing a triangle of three integers $\{y_2,y_3,y_4\}$ whose pairwise differences all have the \emph{exact same} $2$-adic valuation $M_y$. Dividing by $2^{M_y}$ produces three integers with pairwise odd differences, impossible since there are only two parity classes modulo $2$.
+\end{itemize}
+Therefore no $4\times 4$ block exists. Every connected block of $D$ is $3\times 3$, forcing $3\mid N$.
+\end{proof}
+
+\section{Relation to prior work and open problems}
+\label{sec:discussion}
+
+Table~\ref{tab:compare} summarizes the structural boundary separating our fixed-phase binary Fourier-mask model from neighboring matrix families.
+
+\begin{table}[ht]
+\centering
+\caption{Comparison of fixed-phase orthogonal binary Fourier masks with neighboring matrix classes.}
+\label{tab:compare}
+\begin{tabular}{llll}
+\toprule
+Model & Support structure & Nonzero phases & Semiprime / weight-$3$ behavior \\
+\midrule
+Hadamard submatrices of $F_N$~\cite{BGH19,HW21,MK17} & Single $d\times d$ rectangle $J\times K$ & Fixed $\zeta_N^{rc}$ & $d\in\{1,p,q,pq\}$ at $N=pq$ \\
+Unit weighing $\mathrm{UW}(N,d)$~\cite{BKR13} & Arbitrary binary $R$ & Arbitrary on $\mathbb{T}$ & $\mathrm{UW}(N,3)$ exists $\forall N\notin\{1,2,5\}$ \\
+Unitary digraphs~\cite{Sev03} & Arbitrary binary $R$ & Arbitrary $\C$ & Support criteria only \\
+\textbf{Orthogonal Fourier masks (this paper)} & \textbf{Arbitrary binary $R$} & \textbf{Fixed $\zeta_N^{rc}$} & \textbf{$d\in\{0,1,p,q,pq\}$; $d=3\Leftrightarrow 3\mid N$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We also note the recent census of complex generalized weighing matrices~\cite{EOS26}, which treats bounded matrix orders with prescribed automorphism groups rather than arbitrary-support fixed-Fourier masks.
+
+\subsection{Open problems}
+\begin{enumerate}[label=(\arabic*),leftmargin=2em]
+\item \emph{General composite orders:} Does every orthogonal binary Fourier mask of size $N$ satisfy $d\mid N$? The first open composite orders beyond odd semiprimes are $N=2pq$, $N=pqr$ (three distinct odd primes, starting at $N=105$), and $N=p^2 q$ (starting at $N=12, 18, 45$).
+\item \emph{Even semiprimes $N=2q$:} Theorem~\ref{thm:pq-rigidity} resolves block rigidity and exact counts at $d\in\{2,q\}$, while Corollary~\ref{cor:easy-cases} handles $d=1,2$. Does an orthogonal binary Fourier mask of size $2q$ exist only for $d\in\{0,1,2,q,2q\}$?
+\item \emph{Weight $4$ for arbitrary $N$:} Best--Kharaghani--Ramp~\cite{BKR13} classify $\mathrm{UW}(N,4)$; does fixed Fourier phase force $4\mid N$ (or allow $d=4$ when $2\mid N$)?
+\item \emph{Quantitative spectral-norm gaps:} When no orthogonal binary Fourier mask of degree $N-s$ exists, Theorem~\ref{thm:inverse-row}(b) guarantees $\Delta(N,s)>\sqrt{1-s/N}$. Determine the exact value or asymptotic rate of the gap $\Delta(N,s)-\sqrt{1-s/N}$ (for instance, at prime orders $N=p$ and $1\le s\le p-2$).
+\end{enumerate}
+
+\section*{Data and code availability}
+A standalone Python verification script (standard library only) verifying the divisor-block masks, CRT identity, cross-character formula~\eqref{eq:cross-gram}, exact labeled mask counts at $N=6,10,15$ (including exhaustive brute-force verification at $N=6$), the $N=mq^b$ local criterion, and the arbitrary-$N$ weight-$3$ obstruction (\texttt{verify\_fourier\_masks.py}) is publicly available at \url{https://github.com/AgentSlop-Si/orthogonal-fourier-masks}.
+
+\bibliographystyle{amsplain}
+\bibliography{references}
+
+\end{document}
